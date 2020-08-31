@@ -1,0 +1,84 @@
+#!/usr/local/bin/bash
+# Games and Apps Launcher for FreeBSD (GaALfF)
+NAME="GaALfF"
+VER="2.1"
+BY="glowiak"
+ABOU="About $NAME:\n $NAME version $VER\n by $BY"
+ILIST="Minecraft Alex4 OpenTTD Minetest"
+function welcome {
+    zenity --info --title "$NAME v$VER" --text "Welcome to $NAME v$VER"
+    prepare;
+}
+function prepare {
+    cd $HOME
+    mkdir $HOME/gaalff
+    cd $HOME/gaalff
+    mkdir $HOME/gaalff/apps
+    cd $HOME/gaalff/apps
+    mkdir $HOME/gaalff/apps/1
+    cd $HOME/gaalff/apps/1
+    menu1;
+}
+function menu1 {
+    men1=$(zenity --list --title "$NAME v$VER" --text "Task list" --column="Tasks:" Installation Launch About Exit)
+    if [[ "$men1" == "Installation" ]]; then
+        installation;
+    fi
+    if [[ "$men1" == "Launch" ]]; then
+        launcher;
+    fi
+    if [[ "$men1" == "About" ]]; then
+        about;
+    fi
+    if [[ "$men1" == "Exit" ]]; then
+        exitWindow;
+    fi
+    zenity --info --title "$NAME v$VER" --text "Nothing was selected."
+    menu1; 
+}
+function installation {
+    gmenu1=$(zenity --list --title "$NAME v$VER" --text "App/Game List" --column="Select Game/App to install:" $ILIST)
+    if [[ "$gmenu1" == "Minecraft" ]]; then
+        xterm -e "su root -c 'pkg install minecraft-client'"
+        echo "minecraft-client" >> $HOME/gaalff/apps/1/Minecraft
+        zenity --info --title "$NAME v$VER" --text "Done installing Minecraft!"
+        menu1;
+    fi
+    if [[ "$gmenu1" == "OpenTTD" ]]; then
+        xterm -e "su root -c 'pkg install openttd'"
+        echo "openttd" >> $HOME/gaalff/apps/1/OpenTTD
+        zenity --info --title "$NAME v$VER" --text "Done installing OpenTTD!"
+        menu1;
+    fi
+    if [[ "$gmenu1" == "Alex4" ]]; then
+        xterm -e "su root -c 'pkg install alex4'"
+        echo "alex4" >> $HOME/gaalff/apps/1/Alex4
+        zenity --info --title "$NAME v$VER" --text "Done installing Alex4"
+        menu1;
+    fi
+    if [[ "$gmenu1" == "Minetest" ]]; then
+        xterm -e "su root -c 'pkg install minetest minetest_game'"
+        echo "minetest" >> $HOME/gaalff/apps/1/Minetest
+        zenity --info --title "$NAME v$VER" --text "Done installing Minetest"
+        menu1;
+    fi
+    zenity --info --title "$NAME v$VER" --text "Nothing was selected"
+    menu1;
+}
+function launcher {
+    lmenu=$(zenity --list --title "$NAME v$VER" --text "Installed Library" --column="Select Game/App to launch:" $(ls $HOME/gaalff/apps/1))
+    if [[ "$lmenu" == "" ]]; then
+        zenity --info --title "$NAME v$VER" --text "Nothing was selected"
+        menu1;
+    fi
+    bash $HOME/gaalff/apps/1/$lmenu
+    menu1
+}
+function about {
+    zenity --info --title "$NAME v$VER" --text "$ABOU"
+    menu1
+}
+function exitWindow {
+    exit
+}
+welcome;
