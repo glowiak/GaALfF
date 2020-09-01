@@ -10,8 +10,8 @@ INSTALLING:
 Type as root:
 cd /usr/local/bin
 wget http://github.com/glowiak/GaALfF/raw/master/GaALfF
-chmod 775 /usr/local/bin/GaALfF
-To launch type: bash /usr/local/bin/GaALfF
+chmod +x /usr/local/bin/GaALfF
+To launch type: GaALfF
 
 Library:
 -Minecraft
